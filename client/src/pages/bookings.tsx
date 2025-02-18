@@ -154,7 +154,7 @@ export default function BookingsPage() {
               </CardHeader>
               <CardContent className="pb-2">
                 <p className="text-sm font-medium">
-                  Contact: {booking.mobile_phone}
+                  Contact: {booking.mobile_number}
                 </p>
                 {booking.status !== 'pending' && (
                   <p className="text-sm text-muted-foreground mt-1">

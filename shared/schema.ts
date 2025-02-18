@@ -6,14 +6,14 @@ export const bookings = pgTable("bookings", {
   id: uuid("id").primaryKey().defaultRandom(),
   date: timestamp("date").notNull(),
   time: text("time").notNull(),
-  mobile_phone: text("mobile_phone").notNull(),
+  mobile_number: text("mobile_number").notNull(),
   status: text("status").notNull().default('pending'),
 });
 
 export const insertBookingSchema = createInsertSchema(bookings).pick({
   date: true,
   time: true,
-  mobile_phone: true,
+  mobile_number: true,
 });
 
 export type InsertBooking = z.infer<typeof insertBookingSchema>;
