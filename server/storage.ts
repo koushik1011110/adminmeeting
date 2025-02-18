@@ -5,7 +5,6 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
   throw new Error("Missing Supabase credentials");
 }
 
-// Store the credentials in constants after the null check
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
@@ -26,7 +25,7 @@ export class SupabaseStorage implements IStorage {
     const { data, error } = await this.supabase
       .from("bookings")
       .select("*")
-      .order("date", { ascending: true });
+      .order("date", { ascending: false }); // Sort by date descending
 
     if (error) {
       throw new Error(`Failed to fetch bookings: ${error.message}`);
