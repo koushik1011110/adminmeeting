@@ -73,7 +73,7 @@ export default function BookingsPage() {
     },
   });
 
-  const filteredBookings = bookings?.filter(booking => 
+  const filteredBookings = bookings?.filter(booking =>
     statusFilter === 'all' ? true : booking.status === statusFilter
   );
 
@@ -149,7 +149,7 @@ export default function BookingsPage() {
                   {format(new Date(booking.date), "MMMM d, yyyy")}
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Time: {booking.time}
+                  Time: {format(new Date(`2000-01-01 ${booking.time}`), "h:mm a")}
                 </p>
               </CardHeader>
               <CardContent className="pb-2">
