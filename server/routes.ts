@@ -14,7 +14,7 @@ export async function registerRoutes(app: Express) {
 
   app.post("/api/bookings/:id/complete", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       await storage.completeBooking(id);
       res.json({ message: "Booking completed successfully" });
     } catch (error: any) {
@@ -24,7 +24,7 @@ export async function registerRoutes(app: Express) {
 
   app.post("/api/bookings/:id/reject", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       await storage.rejectBooking(id);
       res.json({ message: "Booking rejected successfully" });
     } catch (error: any) {

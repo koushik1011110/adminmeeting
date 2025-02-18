@@ -11,8 +11,8 @@ const supabaseKey = process.env.SUPABASE_KEY;
 
 export interface IStorage {
   getBookings(): Promise<Booking[]>;
-  completeBooking(id: number): Promise<void>;
-  rejectBooking(id: number): Promise<void>;
+  completeBooking(id: string): Promise<void>;
+  rejectBooking(id: string): Promise<void>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -35,7 +35,7 @@ export class SupabaseStorage implements IStorage {
     return data as Booking[];
   }
 
-  async completeBooking(id: number): Promise<void> {
+  async completeBooking(id: string): Promise<void> {
     const { error } = await this.supabase
       .from("bookings")
       .update({ status: 'completed' })
@@ -46,10 +46,10 @@ export class SupabaseStorage implements IStorage {
     }
   }
 
-  async rejectBooking(id: number): Promise<void> {
+  async rejectBooking(id: string): Promise<void> {
     const { error } = await this.supabase
       .from("bookings")
-      .delete()
+      .update({ status: 'rejected' })
       .eq('id', id);
 
     if (error) {

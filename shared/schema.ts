@@ -1,12 +1,13 @@
-import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const bookings = pgTable("bookings", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   date: timestamp("date").notNull(),
   time: text("time").notNull(),
   mobile_phone: text("mobile_phone").notNull(),
+  status: text("status").notNull().default('pending'),
 });
 
 export const insertBookingSchema = createInsertSchema(bookings).pick({

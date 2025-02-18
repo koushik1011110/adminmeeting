@@ -15,11 +15,15 @@ export default function BookingsPage() {
   });
 
   const completeMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await fetch(`/api/bookings/${id}/complete`, {
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/bookings/${id}/complete`, {
         method: 'POST',
         credentials: 'include',
       });
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/bookings"] });
@@ -28,20 +32,38 @@ export default function BookingsPage() {
         description: "Booking marked as completed",
       });
     },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   const rejectMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await fetch(`/api/bookings/${id}/reject`, {
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/bookings/${id}/reject`, {
         method: 'POST',
         credentials: 'include',
       });
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/bookings"] });
       toast({
         title: "Success",
         description: "Booking rejected",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
       });
     },
   });
@@ -91,28 +113,35 @@ export default function BookingsPage() {
                 <p className="text-sm font-medium">
                   Contact: {booking.mobile_phone}
                 </p>
+                {booking.status !== 'pending' && (
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Status: {booking.status}
+                  </p>
+                )}
               </CardContent>
-              <CardFooter className="flex justify-end gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => rejectMutation.mutate(booking.id)}
-                  disabled={rejectMutation.isPending}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <XCircle className="h-4 w-4 mr-1" />
-                  Reject
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => completeMutation.mutate(booking.id)}
-                  disabled={completeMutation.isPending}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-1" />
-                  Complete
-                </Button>
-              </CardFooter>
+              {booking.status === 'pending' && (
+                <CardFooter className="flex justify-end gap-2 pt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => rejectMutation.mutate(booking.id)}
+                    disabled={rejectMutation.isPending}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <XCircle className="h-4 w-4 mr-1" />
+                    Reject
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => completeMutation.mutate(booking.id)}
+                    disabled={completeMutation.isPending}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    Complete
+                  </Button>
+                </CardFooter>
+              )}
             </Card>
           ))
         )}
