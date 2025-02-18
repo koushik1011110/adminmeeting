@@ -12,5 +12,25 @@ export async function registerRoutes(app: Express) {
     }
   });
 
+  app.post("/api/bookings/:id/complete", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.completeBooking(id);
+      res.json({ message: "Booking completed successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/bookings/:id/reject", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.rejectBooking(id);
+      res.json({ message: "Booking rejected successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   return createServer(app);
 }
