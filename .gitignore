@@ -36,3 +36,6 @@ generated-icon.png
 # TypeScript
 *.tsbuildinfo
 vite.config.ts.*
+
+# Project specific
+attached_assets/
